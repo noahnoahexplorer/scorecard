@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# Streamlit page configuration
+st.set_page_config(
+    page_title="Comprehensive Scorecard Generator",  # Page title in the browser tab
+    layout="wide"  # Sets the layout to wide
+)
+
 # Streamlit app layout
 st.title("Comprehensive Scorecard Generator")
 
@@ -134,8 +140,3 @@ if uploaded_file is not None:
         st.error(f"An unexpected error occurred: {e}")
 else:
     st.info("Please upload a CSV file to generate a scorecard.")
-
-# Streamlit app layout
-st.set_page_config(
-    "Comprehensive Scorecard Generator", layout="wide"
-)
