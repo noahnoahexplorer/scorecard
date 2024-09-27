@@ -61,9 +61,11 @@ if uploaded_file is not None:
 
             # Function to generate scorecard for profit margin
             def generate_profit_margin_scorecard(total_cost, total_reward):
-                if total_cost != 0:
-                    profit_margin = ((total_reward - total_cost) / total_cost) * 100
-                    display_kpi_card("Profit Margin", f"{profit_margin:.2f}%", icon="📈", color="#c9daf8")
+                if total_reward != 0:  # To avoid division by zero error
+                    profit_margin = ((total_reward - total_cost) / total_reward) * 100
+                    # Adjust the color based on profit or loss
+                    color = "#ff9999" if profit_margin < 0 else "#b6d7a8"
+                    display_kpi_card("Profit Margin", f"{profit_margin:.2f}%", icon="📈", color=color)
                 else:
                     display_kpi_card("Profit Margin", "N/A", icon="📈", color="#c9daf8")
 
