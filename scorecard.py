@@ -134,3 +134,8 @@ if uploaded_file is not None:
         st.error(f"An unexpected error occurred: {e}")
 else:
     st.info("Please upload a CSV file to generate a scorecard.")
+
+# Streamlit app layout
+st.set_page_config(
+    "Comprehensive Scorecard Generator", layout="wide"
+)
