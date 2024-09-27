@@ -13,8 +13,8 @@ def display_kpi_card(title, value, delta=None, delta_color="normal", icon=None, 
     st.markdown(
         f"""
         <div style="background-color: {color}; padding: 10px; border-radius: 5px;">
-            <div style="font-size: 20px;">{title}</div>
-            <div style="font-size: 28px; font-weight: bold;">{value}</div>
+            <div style="font-size: 20px; color: black;">{title}</div>
+            <div style="font-size: 28px; font-weight: bold; color: black;">{value}</div>
             {'<div style="font-size: 16px; color: green;">' + icon + '</div>' if icon else ''}
             {'<div style="font-size: 16px; color:' + delta_color + ';">' + delta + '</div>' if delta else ''}
         </div>
@@ -45,11 +45,21 @@ if uploaded_file is not None:
             def generate_total_cost_scorecard(df):
                 total_cost = df['total_cost'].sum()
                 display_kpi_card("Total Cost", f"${total_cost:,.2f}", icon="💰", color="#ff9999")
+                return total_cost
 
             # Function to generate scorecard for total reward
             def generate_total_reward_scorecard(df):
                 total_reward = df['rewards'].sum()
                 display_kpi_card("Total Reward", f"${total_reward:,.2f}", icon="🏆", color="#b6d7a8")
+                return total_reward
+
+            # Function to generate scorecard for profit margin
+            def generate_profit_margin_scorecard(total_cost, total_reward):
+                if total_cost != 0:
+                    profit_margin = ((total_reward - total_cost) / total_cost) * 100
+                    display_kpi_card("Profit Margin", f"{profit_margin:.2f}%", icon="📈", color="#c9daf8")
+                else:
+                    display_kpi_card("Profit Margin", "N/A", icon="📈", color="#c9daf8")
 
             # Function to generate summary table
             def generate_summary_table(df):
@@ -90,20 +100,24 @@ if uploaded_file is not None:
             st.subheader("Summary Table by ref_provider and product_name_en")
             generate_summary_table(df)
 
-            # Create three columns for the KPI cards
-            col1, col2, col3 = st.columns(3)
+            # Create four columns for the KPI cards
+            col1, col2, col3, col4 = st.columns(4)
 
             # Place the Total Rewards Amount scorecard in the first column
             with col1:
-                generate_total_reward_scorecard(df)
+                total_reward = generate_total_reward_scorecard(df)
 
             # Place the Total Costs Amount scorecard in the second column
             with col2:
-                generate_total_cost_scorecard(df)
+                total_cost = generate_total_cost_scorecard(df)
 
             # Place the unique username scorecard in the third column
             with col3:
                 generate_unique_username_scorecard(df)
+
+            # Place the profit margin scorecard in the fourth column
+            with col4:
+                generate_profit_margin_scorecard(total_cost, total_reward)
 
             # Add vertical space between sections
             st.write("")  # Adds a blank line
